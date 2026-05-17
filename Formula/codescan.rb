@@ -1,0 +1,51 @@
+# typed: false
+# frozen_string_literal: true
+
+# CodeScan Homebrew formula (template).
+#
+# v1 distribution lives in the `psmon/homebrew-codescan` tap:
+#
+#     brew tap psmon/codescan
+#     brew install codescan
+#
+# The release workflow (or a manual update) rewrites VERSION + the two SHA256
+# placeholders before pushing this file to the tap repo at
+# `Formula/codescan.rb`.
+
+class Codescan < Formula
+  desc "CLI/TUI/GUI source-code scanner with FTS5 search and git blame"
+  homepage "https://github.com/psmon/CodeScan"
+  version "0.4.1"
+  license "MIT"
+
+  on_macos do
+    on_arm do
+      url "https://github.com/psmon/CodeScan/releases/download/v#{version}/codescan-osx-arm64.tar.gz"
+      sha256 "0649e560a6157011902fabeab63db62e4a42cbcedd71e6be04a97da132e5bd0b"
+    end
+    on_intel do
+      odie "CodeScan v1 does not ship an Intel Mac binary. Build from source or use Rosetta with the arm64 build."
+    end
+  end
+
+  def install
+    bin.install "codescan/codescan"
+    pkgshare.install "codescan/VERSION" if File.exist?("codescan/VERSION")
+    doc.install "codescan/README.md" if File.exist?("codescan/README.md")
+  end
+
+  def caveats
+    <<~EOS
+      CodeScan stores user data under ~/.codescan/ (db, logs, config).
+      This directory is preserved across upgrades and uninstalls.
+
+      The v1 binary is not notarized. If macOS Gatekeeper blocks first run:
+        xattr -d com.apple.quarantine #{bin}/codescan
+      or allow it from System Settings → Privacy & Security.
+    EOS
+  end
+
+  test do
+    assert_match version.to_s, shell_output("#{bin}/codescan --version")
+  end
+end

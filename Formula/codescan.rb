@@ -15,13 +15,13 @@
 class Codescan < Formula
   desc "CLI/TUI/GUI source-code scanner with FTS5 search and git blame"
   homepage "https://github.com/psmon/CodeScan"
-  version "0.4.1"
+  version "0.4.2"
   license "MIT"
 
   on_macos do
     on_arm do
       url "https://github.com/psmon/CodeScan/releases/download/v#{version}/codescan-osx-arm64.tar.gz"
-      sha256 "0649e560a6157011902fabeab63db62e4a42cbcedd71e6be04a97da132e5bd0b"
+      sha256 "48330311ee35e36d4f3eb6656b9196b1058e125dddf8b1dc4c334377b7c9d210"
     end
     on_intel do
       odie "CodeScan v1 does not ship an Intel Mac binary. Build from source or use Rosetta with the arm64 build."
